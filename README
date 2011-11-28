@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------------------------
-Python script repo
+Bin_Py Repository
 ----------------------------------------------------------------------------------------
 
-This is my repo where I put various Python scripts. The reason behind this is that I
-want to learn Python and rewriting all my scripts in Python instead of Bash might be a
-good excercise. Also, for some tasks, OO programing is very useful.
+This is my repository where I put various Python scripts. The reason behind this is that
+I want to learn Python and rewriting all my scripts in Python instead of Bash might be a
+good exercise. Also, for some tasks, Object Oriented programming is very useful.
 
 # vim: tw=88:spell:spelllang=en_gb
