@@ -1,8 +1,12 @@
 # Put 0 or 1
-gEnable=1
+Enable=1
 # Put 0 or 1
-gPress_to_select=0
+Press_to_select=0
 # Put
-gSensitivity=140
+Sensitivity=140
 # Put
-gSpeed=130
+Speed=130
+# Path to the temp directory
+Temp="/tmp/trackpoint"
+# Path to the sysfs folder
+Path="/sys/devices/platform/i8042/serio1"

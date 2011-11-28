@@ -2,11 +2,8 @@
 
 import os
 import shutil
-from myconfig import *
+import myconfig as g
 import sys
-
-gTemp="/tmp/trackpoint"
-gPath="/sys/devices/platform/i8042/serio1"
 
 #def init():
 #    try:
@@ -15,39 +12,39 @@ gPath="/sys/devices/platform/i8042/serio1"
 #        print 'No config file found!'
 
 def backup():
-    if not os.path.isdir(gTemp):
-        os.mkdir(gTemp)
-    shutil.copy(gPath+'/press_to_select',gTemp)
-    shutil.copy(gPath+'/sensitivity'    ,gTemp)
-    shutil.copy(gPath+'/speed'          ,gTemp)
+    if not os.path.isdir(g.Temp):
+        os.mkdir(g.Temp)
+    shutil.copy(g.Path+'/press_to_select',g.Temp)
+    shutil.copy(g.Path+'/sensitivity'    ,g.Temp)
+    shutil.copy(g.Path+'/speed'          ,g.Temp)
 
 def restore():
-    if not os.path.isdir(gTemp):
+    if not os.path.isdir(g.Temp):
         return 1
-    shutil.copy(gTemp,gPath+'/press_to_select')
-    shutil.copy(gTemp,gPath+'/sensitivity'    )
-    shutil.copy(gTemp,gPath+'/speed'          )
+    shutil.copy(g.Temp,g.Path+'/press_to_select')
+    shutil.copy(g.Temp,g.Path+'/sensitivity'    )
+    shutil.copy(g.Temp,g.Path+'/speed'          )
 
 def start():
-    if gEnable == 1:
+    if g.Enable == 1:
         print "Setting trackpoint values"
         backup()
 
-        fout = open(gPath+'/press_to_select','w')
-        if gPress_to_select == 1:
+        fout = open(g.Path+'/press_to_select','w')
+        if g.Press_to_select == 1:
             fout.writelines('1')
         else:
             fout.writelines('0')
         fout.close()
 
-        fout = open(gPath+'/sensitivity','w')
-        if gSensitivity:
-            fout.writelines(str(gSensitivity))
+        fout = open(g.Path+'/sensitivity','w')
+        if g.Sensitivity:
+            fout.writelines(str(g.Sensitivity))
         fout.close()
 
-        fout = open(gPath+'/speed','w')
-        if gSpeed:
-            fout.writelines(str(gSpeed))
+        fout = open(g.Path+'/speed','w')
+        if g.Speed:
+            fout.writelines(str(g.Speed))
         fout.close()
     print 'Done'
 
