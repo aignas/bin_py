@@ -1,0 +1,39 @@
+#! /bin/bash
+
+function set_thresh ()
+{
+    DIR=/sys/devices/platform/smapi/
+    if [ -z ${DIR} ]; then
+        echo "tp_smapi is not loaded, your battery will charge up to 100 percent."
+        echo "If you want to change that, please load your tp_smapi module."
+        return 1
+    fi
+    if [ -z $3 ]; then
+        echo "Error, see help for correct parameters"
+        return 1
+    else
+        BAT=$1; LOW=$2; HIGH=$3
+    fi
+    if [ ${LOW} -ge ${HIGH} ]; then
+        echo "Error, see help for correct parameters"
+        return 1
+    fi
+
+    # Echoing files
+    echo ${LOW} > ${DIR}BAT${BAT}/start_charge_thresh
+    echo ${HIGH} > ${DIR}BAT${BAT}/stop_charge_thresh
+
+    return 0
+}
+
+function help_text()
+{
+
+    cat << EOF
+This is the help for this script.
+EOF
+
+}
+
+# Set the battery threshholds with smapi
+set_thresh $@

@@ -1,0 +1,99 @@
+#! /bin/bash
+
+LogDir="${HOME}/.mutt/log"
+
+check_connection_status ()
+{
+    # This is copied from one guy
+    if ! ping -c1 www.google.com > /dev/null 2>&1; then 
+        # Ping could be firewalled ...
+        # '-O -' will redirect the actual html to stdout and thus to /dev/null
+        if ! wget -O - www.google.com > /dev/null 2>&1; then
+        # Both tests failed. We are probably offline 
+        # (or google is offline, i.e. the end has come)
+            exit return 1;
+        fi
+    fi
+    
+    return 0
+}
+
+mail_queue ()
+{
+    # process the mail queue
+    # TODO
+    return 0
+}
+
+start_sync () {
+    # check if connected. If not, do not proceed and print a message
+    if ! check_connection_status; then
+        echo "You are offline, now sync this time"
+        stop_sync
+        return 1
+    fi
+    # Create the LogDir if doesn't exist
+    mkdir -p ${LogDir}
+    touch ${LogDir}/offlineimap
+
+    # start syncing
+    offlineimap $@ > ${LogDir}/offlineimap &
+    
+    return 0
+}
+
+stop_sync () {
+    #kill offlineimap
+    if pidof offlineimap; then
+        pkill offlineimap
+        sleep 4
+        pkill -9 offlineimap
+    fi
+    
+    return 0
+}
+
+sync_once () {
+    start_sync -o
+    
+    return 0
+}
+
+help() {
+    cat << CCC
+This is a helper script for offlineimap. It can do:
+    start offlineimap
+    run it once
+    kill it
+    really kill it
+    send queued messages with msmtp (TO DO)
+
+Usage:
+    --start|-s
+        Start offline imap syncing and don't stop it
+    --once|-o
+        Run it once
+    --kill|-k
+        kill it
+CCC
+}
+
+main ()
+{
+    case $1 in
+        --start|-s)
+            start_sync
+            ;;
+        --once|-o)
+            start_sync -o
+            ;;
+        --kill|-k)
+            stop_sync
+            ;;
+        *)
+            help
+            ;;
+    esac
+}
+
+main $1

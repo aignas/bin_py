@@ -1,0 +1,66 @@
+#! /bin/bash
+
+start ()
+{
+    echo "Stopping network manager"
+    rc.d stop networkmanager
+
+    echo "Killing all leftover processes"
+    killall wpa_supplicant
+    killall dhcpcd
+    killall networkmanager
+
+    echo "starting wpa_supplicant"
+    wpa_supplicant -B -Dwext -iwlan0 -cpass
+    sleep 2
+    dhcpcd wlan0
+
+    return 0
+}
+
+stop ()
+{
+    echo "Stopping wpa_supplicant"
+    killall wpa_supplicant
+    killall dhcpcd
+
+    echo "Starting network manager"
+    rc.d start networkmanager
+
+    return 0
+}
+
+help()
+{
+    cat << EOF
+This program will take care of internet management for you.
+
+Usage:
+
+To start the program:
+    sudo ./control [ --start | ]
+To restore previous settings
+    sudo ./control [ --stop | -s ]
+To print this text
+    ./control [ --help | -h ]
+EOF
+}
+
+
+if [ -z $1 ]; then
+    VAR="--start"
+else
+    VAR=$1
+fi
+
+case $VAR in
+    --start)
+        start
+        ;;
+    --stop|-s)
+        stop
+        ;;
+    --help|-h|*)
+        help
+        ;;
+esac

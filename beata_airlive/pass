@@ -1,0 +1,5 @@
+network={
+	ssid="airlive"
+	#psk="gedvydziu3151"
+	psk=5a283e110316d4c785af120200ea706c23c696fd5de81564ea480d8832ded920
+}
